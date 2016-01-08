@@ -28,7 +28,7 @@ public class IsoCore {
         this.cyApplicationManager = cyactivator.cyApplicationManager;
         this.cyDesktopService = cyactivator.cyDesktopService;
         this.cyServiceRegistrar = cyactivator.cyServiceRegistrar;
-        startmenu = createCliqueStartMenu();
+        startmenu = createIsoStartMenu();
         updatecurrentnetwork();
     }
     public void updatecurrentnetwork() {
@@ -49,7 +49,7 @@ public class IsoCore {
         view = null;
     }
 
-    public IsoUI createCliqueStartMenu() {
+    public IsoUI createIsoStartMenu() {
         IsoUI startmenu = new IsoUI(cyactivator, this);
         cyServiceRegistrar.registerService(startmenu, CytoPanelComponent.class, new Properties());
         CytoPanel cytopanelwest = cyDesktopService.getCytoPanel(CytoPanelName.WEST);
@@ -58,7 +58,7 @@ public class IsoCore {
         return startmenu;
     }
 
-    public void closeCliqueStartMenu() {
+    public void closeIsoStartMenu() {
         cyServiceRegistrar.unregisterService(startmenu, CytoPanelComponent.class);
     }
 

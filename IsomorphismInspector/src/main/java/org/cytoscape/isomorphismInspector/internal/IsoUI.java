@@ -282,7 +282,7 @@ public class IsoUI extends javax.swing.JPanel implements CytoPanelComponent{
     private void exitBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitBActionPerformed
         // TODO add your handling code here:
         isocore.closecore();
-        isocore.closeCliqueStartMenu();
+        isocore.closeIsoStartMenu();
     }//GEN-LAST:event_exitBActionPerformed
     @Override
     public Icon getIcon() {
@@ -291,7 +291,7 @@ public class IsoUI extends javax.swing.JPanel implements CytoPanelComponent{
     
     @Override
     public String getTitle() {
-        return "MClique";
+        return "^Iso^";
     }
     
     @Override
