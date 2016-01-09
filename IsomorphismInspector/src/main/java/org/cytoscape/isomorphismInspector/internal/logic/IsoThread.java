@@ -8,7 +8,6 @@ import org.cytoscape.model.CyNode;
 import org.jgrapht.UndirectedGraph;
 import org.jgrapht.experimental.isomorphism.AdaptiveIsomorphismInspectorFactory;
 import org.jgrapht.experimental.isomorphism.GraphIsomorphismInspector;
-import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.SimpleGraph;
 
 /**
@@ -19,12 +18,21 @@ import org.jgrapht.graph.SimpleGraph;
 public class IsoThread extends Thread{
     public CyNetwork network1;
     public CyNetwork network2;
+    private String nodelabel1;
+    private String edgelabel1;
+    private String nodelabel2;
+    private String edgelabel2;
+    
     IsoUI menu;    
     
-    public IsoThread(IsoUI menu, CyNetwork network1, CyNetwork network2){
+    public IsoThread(IsoUI menu, CyNetwork network1, String nodelabel1, String edgelabel1, CyNetwork network2, String nodelabel2, String edgelabel2){
         this.menu = menu;
         this.network1 = network1;
         this.network2 = network2;
+        this.nodelabel1 = nodelabel1;
+        this.edgelabel1 = edgelabel1;
+        this.nodelabel2 = nodelabel2;
+        this.edgelabel2 = edgelabel2;
     }
    
     public void run(){
@@ -59,17 +67,39 @@ public class IsoThread extends Thread{
             }
             g2.addEdge(e.getSource(), e.getTarget(), e);
         }
+        // for null ; both nodelabel1 and nodelabel2 should be none. only one cant be null
+        NodeLabelEquivalenceComparator nodeComp;
+        EdgeLabelEquivalenceComparator edgeComp;
+        if(nodelabel1.equals("None") && nodelabel2.equals("None"))
+            nodeComp = null;
+        else if(nodelabel1.equals("None") || nodelabel2.equals("None")){
+            System.out.println("Not supported. Specify both 'Node Label 1' and 'Node Label 2' or both as 'None'");
+            throw new UnsupportedOperationException("Not supported. Specify both 'Node Label 1' and 'Node Label 2' or both as 'None'");
+        }
+        else
+            nodeComp = new NodeLabelEquivalenceComparator(network1, nodelabel1, network2, nodelabel2); 
+        // same with edge comp
+        if(edgelabel1.equals("None") && edgelabel2.equals("None"))
+            edgeComp = null;
+        else if(edgelabel1.equals("None") || edgelabel2.equals("None")){
+            System.out.println("Not supported. Specify both 'Edge Label 1' and 'Edge Label 2' or both as 'None'");
+            throw new UnsupportedOperationException("Not supported. Specify both 'Edge Label 1' and 'Edge Label 2' or both as 'None'");
+        }
+        else
+            edgeComp = new EdgeLabelEquivalenceComparator(network1, edgelabel1, network2, edgelabel2);
         
         //GraphIsomorphismInspector iso = AdaptiveIsomorphismInspectorFactory.createIsomorphismInspector(g1, g2, null, null);// dafault comparators
-        GraphIsomorphismInspector iso = AdaptiveIsomorphismInspectorFactory.createIsomorphismInspector(g1, g2, null, null);
+        GraphIsomorphismInspector iso = AdaptiveIsomorphismInspectorFactory.createIsomorphismInspector(g1, g2, nodeComp, edgeComp);
         boolean isoResult = iso.isIsomorphic();
   
         if (isoResult) {
             System.out.println("Graphs are isomorphic.");
+            menu.endComputation("<html>Graphs are isomorphic.<br><html>");
         } else {
             System.out.println("Graphs are NOT isomorphic.");
+            menu.endComputation("<html>Graphs are NOT isomorphic.<br><html>");
         }
-        menu.endComputation();
+        
     }
     
 }

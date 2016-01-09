@@ -2,6 +2,9 @@ package org.cytoscape.isomorphismInspector.internal;
 
 import java.awt.Component;
 import java.awt.event.ItemListener;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -12,6 +15,7 @@ import org.cytoscape.application.swing.CySwingApplication;
 import org.cytoscape.application.swing.CytoPanelComponent;
 import org.cytoscape.application.swing.CytoPanelName;
 import org.cytoscape.isomorphismInspector.internal.logic.IsoThread;
+import org.cytoscape.model.CyColumn;
 import org.cytoscape.model.CyNetwork;
 
 /**
@@ -53,6 +57,10 @@ public class IsoUI extends javax.swing.JPanel implements CytoPanelComponent{
         networkPanel2 = new javax.swing.JPanel();
         netVariable1 = new javax.swing.JLabel();
         networkComboBox2 = new javax.swing.JComboBox();
+        netVariable4 = new javax.swing.JLabel();
+        netVariable6 = new javax.swing.JLabel();
+        nodeLabelComboBox2 = new javax.swing.JComboBox();
+        edgeLabelComboBox2 = new javax.swing.JComboBox();
         startB = new javax.swing.JButton();
         helpExitPanel = new javax.swing.JPanel();
         helpB = new javax.swing.JButton();
@@ -63,6 +71,10 @@ public class IsoUI extends javax.swing.JPanel implements CytoPanelComponent{
         networkPanel1 = new javax.swing.JPanel();
         netVariable2 = new javax.swing.JLabel();
         networkComboBox1 = new javax.swing.JComboBox();
+        netVariable3 = new javax.swing.JLabel();
+        netVariable5 = new javax.swing.JLabel();
+        nodeLabelComboBox1 = new javax.swing.JComboBox();
+        edgeLabelComboBox1 = new javax.swing.JComboBox();
 
         mainPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -74,15 +86,48 @@ public class IsoUI extends javax.swing.JPanel implements CytoPanelComponent{
 
         netVariable1.setText("Network 2");
 
+        networkComboBox2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                networkComboBox2ActionPerformed(evt);
+            }
+        });
+
+        netVariable4.setText("Node Label 2");
+
+        netVariable6.setText("Edge Label 2");
+
+        nodeLabelComboBox2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nodeLabelComboBox2ActionPerformed(evt);
+            }
+        });
+
+        edgeLabelComboBox2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                edgeLabelComboBox2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout networkPanel2Layout = new javax.swing.GroupLayout(networkPanel2);
         networkPanel2.setLayout(networkPanel2Layout);
         networkPanel2Layout.setHorizontalGroup(
             networkPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(networkPanel2Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, networkPanel2Layout.createSequentialGroup()
                 .addGap(19, 19, 19)
-                .addComponent(netVariable1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 72, Short.MAX_VALUE)
-                .addComponent(networkComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(networkPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(networkPanel2Layout.createSequentialGroup()
+                        .addComponent(netVariable1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(networkComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, networkPanel2Layout.createSequentialGroup()
+                        .addComponent(netVariable6, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(edgeLabelComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(networkPanel2Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(netVariable4, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(49, 49, 49)
+                        .addComponent(nodeLabelComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(28, 28, 28))
         );
         networkPanel2Layout.setVerticalGroup(
@@ -92,7 +137,14 @@ public class IsoUI extends javax.swing.JPanel implements CytoPanelComponent{
                 .addGroup(networkPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(netVariable1)
                     .addComponent(networkComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(44, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(networkPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(nodeLabelComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(netVariable4))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(networkPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(netVariable6)
+                    .addComponent(edgeLabelComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         startB.setText("Find if selected networks are isomorphic");
@@ -156,7 +208,9 @@ public class IsoUI extends javax.swing.JPanel implements CytoPanelComponent{
                 .addContainerGap()
                 .addGroup(statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(statusBar, javax.swing.GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE)
-                    .addComponent(statusLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, statusPanelLayout.createSequentialGroup()
+                        .addComponent(statusLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(136, 136, 136)))
                 .addContainerGap())
         );
         statusPanelLayout.setVerticalGroup(
@@ -172,15 +226,35 @@ public class IsoUI extends javax.swing.JPanel implements CytoPanelComponent{
 
         netVariable2.setText("Network 1");
 
+        networkComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                networkComboBox1ActionPerformed(evt);
+            }
+        });
+
+        netVariable3.setText("Node Label 1");
+
+        netVariable5.setText("Edge Label 1");
+
         javax.swing.GroupLayout networkPanel1Layout = new javax.swing.GroupLayout(networkPanel1);
         networkPanel1.setLayout(networkPanel1Layout);
         networkPanel1Layout.setHorizontalGroup(
             networkPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(networkPanel1Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, networkPanel1Layout.createSequentialGroup()
                 .addGap(19, 19, 19)
-                .addComponent(netVariable2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 72, Short.MAX_VALUE)
-                .addComponent(networkComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(networkPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(networkPanel1Layout.createSequentialGroup()
+                        .addComponent(netVariable5, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+                        .addComponent(edgeLabelComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(networkPanel1Layout.createSequentialGroup()
+                        .addGroup(networkPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(netVariable2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(netVariable3, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(networkPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(networkComboBox1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(nodeLabelComboBox1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(28, 28, 28))
         );
         networkPanel1Layout.setVerticalGroup(
@@ -190,7 +264,14 @@ public class IsoUI extends javax.swing.JPanel implements CytoPanelComponent{
                 .addGroup(networkPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(netVariable2)
                     .addComponent(networkComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(44, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(networkPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(nodeLabelComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(netVariable3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(networkPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(netVariable5)
+                    .addComponent(edgeLabelComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
@@ -198,7 +279,7 @@ public class IsoUI extends javax.swing.JPanel implements CytoPanelComponent{
         mainPanelLayout.setHorizontalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(mainPanelLayout.createSequentialGroup()
-                .addGap(36, 36, 36)
+                .addContainerGap()
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(headingLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -208,7 +289,7 @@ public class IsoUI extends javax.swing.JPanel implements CytoPanelComponent{
                             .addComponent(startB, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(statusPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addComponent(networkPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(46, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -241,7 +322,7 @@ public class IsoUI extends javax.swing.JPanel implements CytoPanelComponent{
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 527, Short.MAX_VALUE)
+            .addGap(0, 581, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
@@ -252,8 +333,12 @@ public class IsoUI extends javax.swing.JPanel implements CytoPanelComponent{
 
     private void startBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startBActionPerformed
         CyNetwork net1 = getSelectedNetwork1();
+        String nodelabel1 = (String)nodeLabelComboBox1.getSelectedItem();
+        String edgelabel1 = (String)edgeLabelComboBox1.getSelectedItem();
         CyNetwork net2 = getSelectedNetwork2();
-        logicThread = new IsoThread(this, net1, net2);
+        String nodelabel2 = (String)nodeLabelComboBox2.getSelectedItem();
+        String edgelabel2 = (String)edgeLabelComboBox2.getSelectedItem();
+        logicThread = new IsoThread(this, net1, nodelabel1, edgelabel1, net2, nodelabel2, edgelabel2);
         logicThread.start();
         // validate input conditions
         
@@ -284,6 +369,36 @@ public class IsoUI extends javax.swing.JPanel implements CytoPanelComponent{
         isocore.closecore();
         isocore.closeIsoStartMenu();
     }//GEN-LAST:event_exitBActionPerformed
+
+    private void networkComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_networkComboBox1ActionPerformed
+        // TODO add your handling code here:
+        CyNetwork net1 = getSelectedNetwork1();
+        if(net1 != null){
+            nodeLabelComboBox1.setModel(new javax.swing.DefaultComboBoxModel(getNodeAttributes(net1).toArray()));
+            nodeLabelComboBox1.setSelectedItem("None");
+            edgeLabelComboBox1.setModel(new javax.swing.DefaultComboBoxModel(getEdgeAttributes(net1).toArray()));
+            edgeLabelComboBox1.setSelectedItem("None");
+        }
+    }//GEN-LAST:event_networkComboBox1ActionPerformed
+
+    private void edgeLabelComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edgeLabelComboBox2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_edgeLabelComboBox2ActionPerformed
+
+    private void networkComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_networkComboBox2ActionPerformed
+        // TODO add your handling code here:
+        CyNetwork net2 = getSelectedNetwork2();
+        if(net2 != null){
+            nodeLabelComboBox2.setModel(new javax.swing.DefaultComboBoxModel(getNodeAttributes(net2).toArray()));
+            nodeLabelComboBox2.setSelectedItem("None");
+            edgeLabelComboBox2.setModel(new javax.swing.DefaultComboBoxModel(getEdgeAttributes(net2).toArray()));
+            edgeLabelComboBox2.setSelectedItem("None");
+        }
+    }//GEN-LAST:event_networkComboBox2ActionPerformed
+
+    private void nodeLabelComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nodeLabelComboBox2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_nodeLabelComboBox2ActionPerformed
     @Override
     public Icon getIcon() {
         return null;
@@ -310,9 +425,9 @@ public class IsoUI extends javax.swing.JPanel implements CytoPanelComponent{
         statusLabel.setText("Checking if graphs are isomorphic ...");
     }
     
-    public void endComputation(){
+    public void endComputation(String s){
         statusBar.setIndeterminate(false);
-        statusLabel.setText("<html> Have fun with isomorphism ! <br> You might want to recompute with different inputs <html>");
+        statusLabel.setText(s+"<html> Have fun with isomorphism ! <br> You might want to recompute with different inputs <html>");
         startB.setEnabled(true);
     }
     
@@ -321,6 +436,8 @@ public class IsoUI extends javax.swing.JPanel implements CytoPanelComponent{
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    protected javax.swing.JComboBox edgeLabelComboBox1;
+    protected javax.swing.JComboBox edgeLabelComboBox2;
     private javax.swing.JButton exitB;
     private javax.swing.JLabel headingLabel;
     private javax.swing.JButton helpB;
@@ -328,10 +445,16 @@ public class IsoUI extends javax.swing.JPanel implements CytoPanelComponent{
     private javax.swing.JPanel mainPanel;
     private javax.swing.JLabel netVariable1;
     private javax.swing.JLabel netVariable2;
+    private javax.swing.JLabel netVariable3;
+    private javax.swing.JLabel netVariable4;
+    private javax.swing.JLabel netVariable5;
+    private javax.swing.JLabel netVariable6;
     protected javax.swing.JComboBox networkComboBox1;
     protected javax.swing.JComboBox networkComboBox2;
     private javax.swing.JPanel networkPanel1;
     private javax.swing.JPanel networkPanel2;
+    protected javax.swing.JComboBox nodeLabelComboBox1;
+    protected javax.swing.JComboBox nodeLabelComboBox2;
     private javax.swing.JButton startB;
     private javax.swing.JProgressBar statusBar;
     private javax.swing.JLabel statusLabel;
@@ -390,6 +513,36 @@ public class IsoUI extends javax.swing.JPanel implements CytoPanelComponent{
         }
 
         return null;
+    }
+    
+    public static List<String> getEdgeAttributes(CyNetwork network){
+        Collection<CyColumn> edgeColumns = network.getDefaultEdgeTable().getColumns();
+        List<String> columnsToAdd = new ArrayList<String>(1);
+        
+        columnsToAdd.add("None");
+        int i = 0;
+        for(CyColumn c:edgeColumns){
+            if(!c.isPrimaryKey()){
+                columnsToAdd.add(c.getName());
+                i++;
+            }
+        }
+        return columnsToAdd;
+    }
+    
+    public static List<String> getNodeAttributes(CyNetwork network){
+        Collection<CyColumn> NodeColumns = network.getDefaultNodeTable().getColumns();
+        List<String> columnsToAdd = new ArrayList<String>(1);
+        
+        columnsToAdd.add("None");
+        int i = 0;
+        for(CyColumn c:NodeColumns){
+            if(!c.isPrimaryKey()){
+                columnsToAdd.add(c.getName());
+                i++;
+            }
+        }
+        return columnsToAdd;
     }
     
 }
