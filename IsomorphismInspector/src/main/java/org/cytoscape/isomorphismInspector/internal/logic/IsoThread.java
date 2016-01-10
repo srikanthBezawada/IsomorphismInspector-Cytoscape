@@ -107,6 +107,17 @@ public class IsoThread extends Thread{
         if (vf2.isomorphismExists()) {
             menu.endComputation("<html>Graphs are isomorphic.<br><html>");
             System.out.println("Graphs are isomorphic.");
+            int mappingcount=1;
+            Iterator<GraphMapping<CyNode, CyEdge>> iter = vf2.getMappings();
+            System.out.println("Priting an isomorphic mapping of the graphs");
+            System.out.println(iter.next());
+            System.out.println();
+            System.out.println("Counting number of isomorphic mappings");
+            while(iter.hasNext()){
+                mappingcount++;
+                iter.next();
+            }
+            System.out.println("There are ["+mappingcount+"] number of isomorphic mappings");
         } else {
             menu.endComputation("<html>Graphs are NOT isomorphic.<br><html>");
             System.out.println("Graphs are NOT isomorphic.");

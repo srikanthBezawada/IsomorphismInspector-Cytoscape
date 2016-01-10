@@ -77,6 +77,8 @@ public class IsoUI extends javax.swing.JPanel implements CytoPanelComponent{
         nodeLabelComboBox1 = new javax.swing.JComboBox();
         edgeLabelComboBox1 = new javax.swing.JComboBox();
 
+        setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
         jScrollPane1.setToolTipText("");
         jScrollPane1.setMaximumSize(new java.awt.Dimension(400, 32767));
         jScrollPane1.setPreferredSize(new java.awt.Dimension(300, 860));
@@ -320,15 +322,15 @@ public class IsoUI extends javax.swing.JPanel implements CytoPanelComponent{
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 365, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(16, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 574, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 582, Short.MAX_VALUE)
+                .addGap(20, 20, 20))
         );
     }// </editor-fold>//GEN-END:initComponents
 
