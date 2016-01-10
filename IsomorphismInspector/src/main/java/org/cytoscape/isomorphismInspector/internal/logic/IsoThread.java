@@ -1,13 +1,15 @@
 package org.cytoscape.isomorphismInspector.internal.logic;
 
+import java.util.Iterator;
 import java.util.List;
 import org.cytoscape.isomorphismInspector.internal.IsoUI;
 import org.cytoscape.model.CyEdge;
 import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.CyNode;
+import org.jgrapht.GraphMapping;
 import org.jgrapht.UndirectedGraph;
-import org.jgrapht.experimental.isomorphism.AdaptiveIsomorphismInspectorFactory;
-import org.jgrapht.experimental.isomorphism.GraphIsomorphismInspector;
+import org.jgrapht.alg.isomorphism.VF2GraphIsomorphismInspector;
+import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.SimpleGraph;
 
 /**
@@ -35,10 +37,17 @@ public class IsoThread extends Thread{
         this.edgelabel2 = edgelabel2;
     }
    
+    @Override
     public void run(){
         menu.startComputation();
 //        DefaultDirectedGraph<CyNode, CyEdge> g1 = new DefaultDirectedGraph<CyNode, CyEdge>(CyEdge.class);//SimpleGraph<CyNode, CyEdge>(CyEdge.class)
         UndirectedGraph<CyNode, CyEdge> g1 = new SimpleGraph<CyNode, CyEdge>(CyEdge.class);//SimpleGraph<CyNode, CyEdge>(CyEdge.class)
+        
+        /* i GUESS WE NEED TO USE BELOW CODE FOR DIRECTED GRAPHS
+        DefaultDirectedGraph<Integer, DefaultEdge> g2 =
+            new DefaultDirectedGraph<Integer, DefaultEdge>(DefaultEdge.class);
+        */
+        
         /*
           1) Change simple graph so that you need not remove self-loops later      
           2) Edge type <Object> to <CyEdge>, and edge factory fails
@@ -73,6 +82,7 @@ public class IsoThread extends Thread{
         if(nodelabel1.equals("None") && nodelabel2.equals("None"))
             nodeComp = null;
         else if(nodelabel1.equals("None") || nodelabel2.equals("None")){
+            menu.endComputation("<html>Error! Not supported.<br>Specify both 'Node Label 1' and 'Node Label 2' or both as 'None'<br><html>");
             System.out.println("Not supported. Specify both 'Node Label 1' and 'Node Label 2' or both as 'None'");
             throw new UnsupportedOperationException("Not supported. Specify both 'Node Label 1' and 'Node Label 2' or both as 'None'");
         }
@@ -82,23 +92,26 @@ public class IsoThread extends Thread{
         if(edgelabel1.equals("None") && edgelabel2.equals("None"))
             edgeComp = null;
         else if(edgelabel1.equals("None") || edgelabel2.equals("None")){
+            menu.endComputation("<html>Error! Not supported.<br>Specify both 'Edge Label 1' and 'Edge Label 2' or both as 'None'<br><html>");
             System.out.println("Not supported. Specify both 'Edge Label 1' and 'Edge Label 2' or both as 'None'");
             throw new UnsupportedOperationException("Not supported. Specify both 'Edge Label 1' and 'Edge Label 2' or both as 'None'");
         }
         else
             edgeComp = new EdgeLabelEquivalenceComparator(network1, edgelabel1, network2, edgelabel2);
         
-        //GraphIsomorphismInspector iso = AdaptiveIsomorphismInspectorFactory.createIsomorphismInspector(g1, g2, null, null);// dafault comparators
-        GraphIsomorphismInspector iso = AdaptiveIsomorphismInspectorFactory.createIsomorphismInspector(g1, g2, nodeComp, edgeComp);
-        boolean isoResult = iso.isIsomorphic();
-  
-        if (isoResult) {
-            System.out.println("Graphs are isomorphic.");
+        VF2GraphIsomorphismInspector<CyNode, CyEdge> vf2 =
+            new VF2GraphIsomorphismInspector<CyNode, CyEdge>(g1, g2, nodeComp, edgeComp);        
+ 
+        System.out.println();
+        System.out.println("------------------Graph Isomorphism------------------");
+        if (vf2.isomorphismExists()) {
             menu.endComputation("<html>Graphs are isomorphic.<br><html>");
+            System.out.println("Graphs are isomorphic.");
         } else {
-            System.out.println("Graphs are NOT isomorphic.");
             menu.endComputation("<html>Graphs are NOT isomorphic.<br><html>");
+            System.out.println("Graphs are NOT isomorphic.");
         }
+        System.out.println("------------------Graph Isomorphism------------------");
         
     }
     
