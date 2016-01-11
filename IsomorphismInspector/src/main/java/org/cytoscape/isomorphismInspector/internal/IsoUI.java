@@ -10,6 +10,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.Icon;
+import javax.swing.ScrollPaneConstants;
 import org.cytoscape.application.CyApplicationManager;
 import org.cytoscape.application.swing.CySwingApplication;
 import org.cytoscape.application.swing.CytoPanelComponent;
@@ -29,7 +30,7 @@ public class IsoUI extends javax.swing.JPanel implements CytoPanelComponent{
     /**
      * Creates new form IsoUI
      */
-    private IsoCore isocore;
+    public IsoCore isocore;
     public IsoThread logicThread;
     CyApplicationManager cyApplicationManager;
     CySwingApplication cyDesktopService;

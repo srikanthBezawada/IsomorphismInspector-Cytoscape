@@ -110,7 +110,9 @@ public class IsoThread extends Thread{
             int mappingcount=1;
             Iterator<GraphMapping<CyNode, CyEdge>> iter = vf2.getMappings();
             System.out.println("Priting an isomorphic mapping of the graphs");
-            System.out.println(iter.next());
+            GraphMapping<CyNode, CyEdge> mapping = iter.next();
+            menu.isocore.createResultsPanel(mapping);
+            System.out.println(mapping);
             System.out.println();
             System.out.println("Counting number of isomorphic mappings");
             while(iter.hasNext()){

@@ -1,14 +1,20 @@
 package org.cytoscape.isomorphismInspector.internal;
 
+import java.util.List;
 import java.util.Properties;
 import org.cytoscape.application.CyApplicationManager;
 import org.cytoscape.application.swing.CySwingApplication;
 import org.cytoscape.application.swing.CytoPanel;
 import org.cytoscape.application.swing.CytoPanelComponent;
 import org.cytoscape.application.swing.CytoPanelName;
+import org.cytoscape.application.swing.CytoPanelState;
+import org.cytoscape.isomorphismInspector.internal.results.ResultsGUI;
+import org.cytoscape.model.CyEdge;
 import org.cytoscape.model.CyNetwork;
+import org.cytoscape.model.CyNode;
 import org.cytoscape.service.util.CyServiceRegistrar;
 import org.cytoscape.view.model.CyNetworkView;
+import org.jgrapht.GraphMapping;
 
 /**
  * @author SrikanthB
@@ -73,6 +79,20 @@ public class IsoCore {
     
     public static IsoUI getTiDieStartMenu(){
         return startmenu;
+    }
+    
+    public void createResultsPanel(GraphMapping<CyNode, CyEdge> mapping) {
+		ResultsGUI resultsPanel = new ResultsGUI(this);
+		cyServiceRegistrar.registerService(resultsPanel, CytoPanelComponent.class, new Properties());
+		CytoPanel panelEast = cyDesktopService.getCytoPanel(CytoPanelName.EAST);
+		panelEast.setState(CytoPanelState.DOCK);
+		panelEast.setSelectedIndex(panelEast.indexOfComponent(resultsPanel));
+//		visualizers.add(visualizer);
+		resultsPanel.setEnabled(mapping);
+	}
+    
+    public void closeCurrentResultPanel(ResultsGUI resultPanel) {
+        cyServiceRegistrar.unregisterService(resultPanel, CytoPanelComponent.class);
     }
     
 }
