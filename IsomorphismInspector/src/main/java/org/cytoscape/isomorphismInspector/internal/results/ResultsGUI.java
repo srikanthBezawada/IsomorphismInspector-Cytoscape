@@ -8,6 +8,8 @@ package org.cytoscape.isomorphismInspector.internal.results;
 
 import java.awt.Component;
 import javax.swing.Icon;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 import org.cytoscape.application.swing.CytoPanelComponent;
 import org.cytoscape.application.swing.CytoPanelName;
 import org.cytoscape.isomorphismInspector.internal.IsoCore;
@@ -32,8 +34,31 @@ public class ResultsGUI extends javax.swing.JPanel implements CytoPanelComponent
     }
     
     public void setEnabled(GraphMapping<CyNode, CyEdge> mapping){
+        super.setVisible(false);
         this.mapping = mapping;
-        super.setEnabled(true);
+        populateResults();
+        super.setVisible(true);
+    }
+    
+    private void populateResults(){
+        // create object of table and table model
+        JTable tbl = new JTable();
+        DefaultTableModel dtm = new DefaultTableModel(0, 0);
+
+       // add header of the table
+       String header[] = new String[] { "Network 1", "Network 2" };
+
+       // add header in table model     
+        dtm.setColumnIdentifiers(header);
+           //set model into the table object
+              tbl.setModel(dtm);
+
+            // add row dynamically into the table      
+       for (int count = 1; count <= 30; count++) {
+               dtm.addRow(new Object[] { "data", "data" });
+        }
+       tbl.setVisible(true);
+       this.jPanel1.add(tbl);
     }
 
     /**
@@ -53,11 +78,11 @@ public class ResultsGUI extends javax.swing.JPanel implements CytoPanelComponent
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 276, Short.MAX_VALUE)
+            .addGap(0, 283, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 278, Short.MAX_VALUE)
+            .addGap(0, 332, Short.MAX_VALUE)
         );
 
         jScrollPane1.setViewportView(jPanel1);
@@ -76,17 +101,17 @@ public class ResultsGUI extends javax.swing.JPanel implements CytoPanelComponent
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                    .addComponent(jButton1)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
                 .addComponent(jButton1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
