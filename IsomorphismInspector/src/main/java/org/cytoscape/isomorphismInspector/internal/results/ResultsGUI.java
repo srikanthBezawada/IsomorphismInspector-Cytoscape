@@ -11,6 +11,8 @@ import java.util.Iterator;
 import java.util.List;
 import javax.swing.Icon;
 import javax.swing.JTable;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import org.cytoscape.application.swing.CytoPanelComponent;
 import org.cytoscape.application.swing.CytoPanelName;
@@ -18,6 +20,8 @@ import org.cytoscape.isomorphismInspector.internal.IsoCore;
 import org.cytoscape.model.CyEdge;
 import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.CyNode;
+import org.cytoscape.model.CyRow;
+import org.cytoscape.model.CyTable;
 import org.jgrapht.GraphMapping;
 
 /**
@@ -70,6 +74,8 @@ public class ResultsGUI extends javax.swing.JPanel implements CytoPanelComponent
             , net2.getRow(n2).get(CyNetwork.NAME, String.class) });
         }
        
+        // attach listener
+        tbl.getSelectionModel().addListSelectionListener(new RowListener(net1, net2, mapping));
         this.jScrollPane2.setViewportView(tbl);
     }
 
@@ -172,4 +178,40 @@ public class ResultsGUI extends javax.swing.JPanel implements CytoPanelComponent
         return null;
     }
 
+    
+    
+    class RowListener implements ListSelectionListener{
+        private CyNetwork net1;
+        private CyNetwork net2;
+        private GraphMapping<CyNode, CyEdge> mapping;
+        
+        RowListener(CyNetwork net1, CyNetwork net2, GraphMapping<CyNode, CyEdge> mapping){
+            this.net1 = net1;
+            this.net2 = net2;
+            this.mapping = mapping;
+        }
+        @Override
+        public void valueChanged(ListSelectionEvent e) {
+            // current position
+            int position = e.getLastIndex();
+            // select the correspoding node in the net1
+            CyTable nodeTable1 = net1.getDefaultNodeTable();
+            for(CyNode n1 : net1.getNodeList()){	
+                CyRow row = nodeTable1.getRow(n1.getSUID());
+                row.set("selected", false);
+            }
+            CyNode node1 = net1.getNodeList().get(position);
+            nodeTable1.getRow(node1.getSUID()).set("selected", true);
+            // select the correspoding node in the net2
+            CyTable nodeTable2 = net2.getDefaultNodeTable();
+            for(CyNode n2 : net2.getNodeList()){	
+                CyRow row = nodeTable2.getRow(n2.getSUID());
+                row.set("selected", false);
+            }
+            CyNode node2 = mapping.getVertexCorrespondence(node1, true);
+            nodeTable2.getRow(node2.getSUID()).set("selected", true);
+            
+        }
+        
+    }
 }
