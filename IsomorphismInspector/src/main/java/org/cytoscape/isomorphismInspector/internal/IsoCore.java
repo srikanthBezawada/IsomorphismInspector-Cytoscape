@@ -81,14 +81,14 @@ public class IsoCore {
         return startmenu;
     }
     
-    public void createResultsPanel(GraphMapping<CyNode, CyEdge> mapping) {
+    public void createResultsPanel(GraphMapping<CyNode, CyEdge> mapping, CyNetwork net1, CyNetwork net2) {
 		ResultsGUI resultsPanel = new ResultsGUI(this);
 		cyServiceRegistrar.registerService(resultsPanel, CytoPanelComponent.class, new Properties());
 		CytoPanel panelEast = cyDesktopService.getCytoPanel(CytoPanelName.EAST);
 		panelEast.setState(CytoPanelState.DOCK);
 		panelEast.setSelectedIndex(panelEast.indexOfComponent(resultsPanel));
 //		visualizers.add(visualizer);
-		resultsPanel.setEnabled(mapping);
+		resultsPanel.setEnabled(mapping, net1, net2);
 	}
     
     public void closeCurrentResultPanel(ResultsGUI resultPanel) {
