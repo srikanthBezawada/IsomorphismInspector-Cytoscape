@@ -3,6 +3,7 @@ package org.cytoscape.isomorphismInspector.internal.logic;
 import java.util.Iterator;
 import java.util.List;
 import org.cytoscape.isomorphismInspector.internal.IsoUI;
+import org.cytoscape.isomorphismInspector.internal.results.ResultsGUI;
 import org.cytoscape.model.CyEdge;
 import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.CyNode;
@@ -111,7 +112,7 @@ public class IsoThread extends Thread{
             Iterator<GraphMapping<CyNode, CyEdge>> iter = vf2.getMappings();
             System.out.println("Priting an isomorphic mapping of the graphs");
             GraphMapping<CyNode, CyEdge> mapping = iter.next();
-            menu.isocore.createResultsPanel(mapping, network1, network2);
+            ResultsGUI resultsPanel = menu.isocore.createResultsPanel(mapping, network1, network2);
             System.out.println(mapping);
             System.out.println();
             System.out.println("Counting number of isomorphic mappings");
@@ -119,6 +120,7 @@ public class IsoThread extends Thread{
                 mappingcount++;
                 iter.next();
             }
+            resultsPanel.setResult("Number of isomorphisms found = "+mappingcount);
             System.out.println("There are ["+mappingcount+"] number of isomorphic mappings");
         } else {
             menu.endComputation("<html>Graphs are NOT isomorphic.<br><html>");

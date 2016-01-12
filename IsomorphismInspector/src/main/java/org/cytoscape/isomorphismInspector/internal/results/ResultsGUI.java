@@ -7,21 +7,23 @@
 package org.cytoscape.isomorphismInspector.internal.results;
 
 import java.awt.Component;
+import java.awt.event.MouseAdapter;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import javax.swing.Icon;
 import javax.swing.JTable;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import org.cytoscape.application.swing.CytoPanelComponent;
 import org.cytoscape.application.swing.CytoPanelName;
+import org.cytoscape.isomorphismInspector.internal.CyActivator;
 import org.cytoscape.isomorphismInspector.internal.IsoCore;
 import org.cytoscape.model.CyEdge;
 import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.CyNode;
 import org.cytoscape.model.CyRow;
 import org.cytoscape.model.CyTable;
+import org.cytoscape.view.model.CyNetworkView;
 import org.jgrapht.GraphMapping;
 
 /**
@@ -34,6 +36,7 @@ public class ResultsGUI extends javax.swing.JPanel implements CytoPanelComponent
     private GraphMapping<CyNode, CyEdge> mapping;
     private CyNetwork net1;
     private CyNetwork net2;
+    private JTable tbl;
     /**
      * Creates new form ResultsGUI
      */
@@ -53,7 +56,7 @@ public class ResultsGUI extends javax.swing.JPanel implements CytoPanelComponent
     
     private void populateResults(){
         // create object of table and table model
-        JTable tbl = new JTable();
+        tbl = new JTable();
         DefaultTableModel dtm = new DefaultTableModel(0, 0);
 
         // add header of the table
@@ -75,7 +78,12 @@ public class ResultsGUI extends javax.swing.JPanel implements CytoPanelComponent
         }
        
         // attach listener
-        tbl.getSelectionModel().addListSelectionListener(new RowListener(net1, net2, mapping));
+        tbl.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableMouseClicked(evt);
+            }
+        });
         this.jScrollPane2.setViewportView(tbl);
     }
 
@@ -92,6 +100,10 @@ public class ResultsGUI extends javax.swing.JPanel implements CytoPanelComponent
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jButton1 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Node mapping from Network 1 to Network 2"));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -106,7 +118,7 @@ public class ResultsGUI extends javax.swing.JPanel implements CytoPanelComponent
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -119,6 +131,10 @@ public class ResultsGUI extends javax.swing.JPanel implements CytoPanelComponent
             }
         });
 
+        jLabel1.setText("An Isomorphic mapping from Network 1 to Network 2");
+
+        jLabel2.setText("jLabel2");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -127,7 +143,12 @@ public class ResultsGUI extends javax.swing.JPanel implements CytoPanelComponent
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton1)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -136,7 +157,11 @@ public class ResultsGUI extends javax.swing.JPanel implements CytoPanelComponent
                 .addContainerGap()
                 .addComponent(jButton1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -149,6 +174,8 @@ public class ResultsGUI extends javax.swing.JPanel implements CytoPanelComponent
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -177,41 +204,41 @@ public class ResultsGUI extends javax.swing.JPanel implements CytoPanelComponent
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         return null;
     }
+    
+    public void setResult(String s){
+        this.jLabel2.setText(s);
+    }
 
-    
-    
-    class RowListener implements ListSelectionListener{
-        private CyNetwork net1;
-        private CyNetwork net2;
-        private GraphMapping<CyNode, CyEdge> mapping;
-        
-        RowListener(CyNetwork net1, CyNetwork net2, GraphMapping<CyNode, CyEdge> mapping){
-            this.net1 = net1;
-            this.net2 = net2;
-            this.mapping = mapping;
+    private void tableMouseClicked(java.awt.event.MouseEvent evt){
+        int[] selections = tbl.getSelectedRows();
+        CyTable nodeTable1 = net1.getDefaultNodeTable();
+        for(CyNode n1 : net1.getNodeList()){	
+            CyRow row = nodeTable1.getRow(n1.getSUID());
+            row.set("selected", false);
         }
-        @Override
-        public void valueChanged(ListSelectionEvent e) {
-            // current position
-            int position = e.getLastIndex();
-            // select the correspoding node in the net1
-            CyTable nodeTable1 = net1.getDefaultNodeTable();
-            for(CyNode n1 : net1.getNodeList()){	
-                CyRow row = nodeTable1.getRow(n1.getSUID());
-                row.set("selected", false);
-            }
-            CyNode node1 = net1.getNodeList().get(position);
+        CyTable nodeTable2 = net2.getDefaultNodeTable();
+        for(CyNode n2 : net2.getNodeList()){	
+            CyRow row = nodeTable2.getRow(n2.getSUID());
+            row.set("selected", false);
+        }
+        // select the correspoding node in the net1
+        // select the correspoding node in the net2
+        for(int i=0;i<selections.length; i++){
+            CyNode node1 = net1.getNodeList().get(selections[i]);
             nodeTable1.getRow(node1.getSUID()).set("selected", true);
-            // select the correspoding node in the net2
-            CyTable nodeTable2 = net2.getDefaultNodeTable();
-            for(CyNode n2 : net2.getNodeList()){	
-                CyRow row = nodeTable2.getRow(n2.getSUID());
-                row.set("selected", false);
-            }
             CyNode node2 = mapping.getVertexCorrespondence(node1, true);
             nodeTable2.getRow(node2.getSUID()).set("selected", true);
-            
         }
+        //update views
+        Collection<CyNetworkView> c1 = CyActivator.getNetworkViewManager().getNetworkViews(net1);
+        Iterator<CyNetworkView> it1 = c1.iterator();
+        while(it1.hasNext())
+            it1.next().updateView();
+        Collection<CyNetworkView> c2 = CyActivator.getNetworkViewManager().getNetworkViews(net2);
+        Iterator<CyNetworkView> it2 = c2.iterator();
+        while(it2.hasNext())
+            it2.next().updateView();
         
     }
+    
 }
