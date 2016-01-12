@@ -10,7 +10,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.Icon;
-import javax.swing.ScrollPaneConstants;
+import javax.swing.JOptionPane;
 import org.cytoscape.application.CyApplicationManager;
 import org.cytoscape.application.swing.CySwingApplication;
 import org.cytoscape.application.swing.CytoPanelComponent;
@@ -342,23 +342,15 @@ public class IsoUI extends javax.swing.JPanel implements CytoPanelComponent{
         CyNetwork net2 = getSelectedNetwork2();
         String nodelabel2 = (String)nodeLabelComboBox2.getSelectedItem();
         String edgelabel2 = (String)edgeLabelComboBox2.getSelectedItem();
-        logicThread = new IsoThread(this, net1, nodelabel1, edgelabel1, net2, nodelabel2, edgelabel2);
-        logicThread.start();
-        // validate input conditions
-        
-        
-        
-        
-        /*
-        if(currentnetwork != null){
-            currentnetworkview = cyApplicationManager.getCurrentNetworkView();
-            logicThread = new CliqueThread(this, currentnetwork, currentnetworkview, YESbutton.isSelected());
+        if(net1 != null && net2 != null){
+            logicThread = new IsoThread(this, net1, nodelabel1, edgelabel1, net2, nodelabel2, edgelabel2);
             logicThread.start();
         } else{
             startB.setEnabled(false);
-            JOptionPane.showMessageDialog(null, "IMPORT a network first! ", "No Network found ", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "SELECT appropriate networks using comboboxes ", "Import and select networks ", JOptionPane.WARNING_MESSAGE);
             return;
-        }*/
+        }
+
     }//GEN-LAST:event_startBActionPerformed
 
     private void helpBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_helpBActionPerformed

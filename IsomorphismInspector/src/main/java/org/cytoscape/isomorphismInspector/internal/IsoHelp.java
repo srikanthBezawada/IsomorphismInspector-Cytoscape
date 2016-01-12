@@ -61,7 +61,7 @@ public class IsoHelp extends javax.swing.JFrame {
         helpString =
                 " Graph Isomorphism : \n\n"
                 + "----\n"
-                + "This app finds if two selected networks are isomorphic k \n";   
+                + "This app finds if two selected networks are isomorphic  \n";   
 
         this.setTitle("Isomorphism Help : ");
         

@@ -10,7 +10,6 @@ import org.cytoscape.model.CyNode;
 import org.jgrapht.GraphMapping;
 import org.jgrapht.UndirectedGraph;
 import org.jgrapht.alg.isomorphism.VF2GraphIsomorphismInspector;
-import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.SimpleGraph;
 
 /**
@@ -41,18 +40,7 @@ public class IsoThread extends Thread{
     @Override
     public void run(){
         menu.startComputation();
-//        DefaultDirectedGraph<CyNode, CyEdge> g1 = new DefaultDirectedGraph<CyNode, CyEdge>(CyEdge.class);//SimpleGraph<CyNode, CyEdge>(CyEdge.class)
-        UndirectedGraph<CyNode, CyEdge> g1 = new SimpleGraph<CyNode, CyEdge>(CyEdge.class);//SimpleGraph<CyNode, CyEdge>(CyEdge.class)
-        
-        /* i GUESS WE NEED TO USE BELOW CODE FOR DIRECTED GRAPHS
-        DefaultDirectedGraph<Integer, DefaultEdge> g2 =
-            new DefaultDirectedGraph<Integer, DefaultEdge>(DefaultEdge.class);
-        */
-        
-        /*
-          1) Change simple graph so that you need not remove self-loops later      
-          2) Edge type <Object> to <CyEdge>, and edge factory fails
-        */        
+        UndirectedGraph<CyNode, CyEdge> g1 = new SimpleGraph<CyNode, CyEdge>(CyEdge.class);   
         List<CyNode> nodeList1 = network1.getNodeList();
         List<CyEdge> edgeList1 = network1.getEdgeList();
         for(CyNode n : nodeList1){
