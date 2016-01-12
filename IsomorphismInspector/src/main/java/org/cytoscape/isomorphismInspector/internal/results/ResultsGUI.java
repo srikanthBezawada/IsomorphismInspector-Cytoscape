@@ -196,7 +196,7 @@ public class ResultsGUI extends javax.swing.JPanel implements CytoPanelComponent
     @Override
     public String getTitle() {
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        return "Graph isomorphism Results";
+        return CyActivator.APP_NAME+" Results";
     }
 
     @Override

@@ -410,7 +410,7 @@ public class IsoUI extends javax.swing.JPanel implements CytoPanelComponent{
     
     @Override
     public String getTitle() {
-        return "^Iso^";
+        return CyActivator.APP_NAME;
     }
     
     @Override

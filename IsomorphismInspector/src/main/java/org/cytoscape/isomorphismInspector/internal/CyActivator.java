@@ -34,13 +34,14 @@ public class CyActivator extends AbstractCyActivator {
     public static CyNetworkViewFactory networkViewFactory;
     public static CyNetworkViewManager networkViewManager;
     public static CySwingAppAdapter adapter;
+    public static final String APP_NAME = "CyIsomorphism";
     
     public CyActivator() {
         super();
     }
     
     public void start(BundleContext context) throws Exception {
-        String version = new String(" 1.0");
+        String version = new String(" 0.2");
         this.appAdapter = getService(context, CyAppAdapter.class);
         this.networkViewManager = getService(context, CyNetworkViewManager.class);
         this.networkViewFactory = getService(context, CyNetworkViewFactory.class);
@@ -51,7 +52,7 @@ public class CyActivator extends AbstractCyActivator {
         this.cyServiceRegistrar = getService(context, CyServiceRegistrar.class);
         this.eventHelper = getService(context, CyEventHelper.class);
         this.adapter = getService(context,CySwingAppAdapter.class);
-        menuaction = new MenuAction(cyApplicationManager, "Isomorphic ? " + version, this);
+        menuaction = new MenuAction(cyApplicationManager, APP_NAME + version, this);
         
         NetworkEventsListener networkEventsListener = new NetworkEventsListener();
         registerService(context,networkEventsListener,NetworkAddedListener.class, new Properties());
