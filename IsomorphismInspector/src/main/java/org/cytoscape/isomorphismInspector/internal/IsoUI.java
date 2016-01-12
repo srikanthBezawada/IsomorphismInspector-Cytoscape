@@ -371,7 +371,7 @@ public class IsoUI extends javax.swing.JPanel implements CytoPanelComponent{
     private void exitBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitBActionPerformed
         // TODO add your handling code here:
         isocore.closecore();
-        isocore.closeIsoStartMenu();
+        isocore.closeIsoStartMenu(this);
     }//GEN-LAST:event_exitBActionPerformed
 
     private void networkComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_networkComboBox1ActionPerformed

@@ -56,7 +56,7 @@ public class IsoCore {
     }
 
     public IsoUI createIsoStartMenu() {
-        IsoUI startmenu = new IsoUI(cyactivator, this);
+        startmenu = new IsoUI(cyactivator, this);
         cyServiceRegistrar.registerService(startmenu, CytoPanelComponent.class, new Properties());
         CytoPanel cytopanelwest = cyDesktopService.getCytoPanel(CytoPanelName.WEST);
         int index = cytopanelwest.indexOfComponent(startmenu);
@@ -64,8 +64,8 @@ public class IsoCore {
         return startmenu;
     }
 
-    public void closeIsoStartMenu() {
-        cyServiceRegistrar.unregisterService(startmenu, CytoPanelComponent.class);
+    public void closeIsoStartMenu(IsoUI menu) {
+        cyServiceRegistrar.unregisterService(menu, CytoPanelComponent.class);
     }
 
    
