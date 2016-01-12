@@ -85,7 +85,7 @@ public class IsoCore {
 		ResultsGUI resultsPanel = new ResultsGUI(this);
 		cyServiceRegistrar.registerService(resultsPanel, CytoPanelComponent.class, new Properties());
 		CytoPanel panelEast = cyDesktopService.getCytoPanel(CytoPanelName.EAST);
-		panelEast.setState(CytoPanelState.FLOAT);
+		panelEast.setState(CytoPanelState.DOCK);
 		panelEast.setSelectedIndex(panelEast.indexOfComponent(resultsPanel));
 //		visualizers.add(visualizer);
 		resultsPanel.setEnabled(mapping, net1, net2);
