@@ -57,7 +57,12 @@ public class ResultsGUI extends javax.swing.JPanel implements CytoPanelComponent
     private void populateResults(){
         // create object of table and table model
         tbl = new JTable();
-        DefaultTableModel dtm = new DefaultTableModel(0, 0);
+        DefaultTableModel dtm = new DefaultTableModel(0, 0){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }   
+        };
 
         // add header of the table
         // get the network names
@@ -80,8 +85,8 @@ public class ResultsGUI extends javax.swing.JPanel implements CytoPanelComponent
         // attach listener
         tbl.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tableMouseClicked(evt);
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                tableMouseReleased(evt);
             }
         });
         this.jScrollPane2.setViewportView(tbl);
@@ -209,7 +214,7 @@ public class ResultsGUI extends javax.swing.JPanel implements CytoPanelComponent
         this.jLabel2.setText(s);
     }
 
-    private void tableMouseClicked(java.awt.event.MouseEvent evt){
+    private void tableMouseReleased(java.awt.event.MouseEvent evt){
         int[] selections = tbl.getSelectedRows();
         CyTable nodeTable1 = net1.getDefaultNodeTable();
         for(CyNode n1 : net1.getNodeList()){	
