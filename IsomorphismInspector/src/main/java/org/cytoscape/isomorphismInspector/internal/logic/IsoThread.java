@@ -2,6 +2,9 @@ package org.cytoscape.isomorphismInspector.internal.logic;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import org.cytoscape.isomorphismInspector.internal.IsoUI;
 import org.cytoscape.isomorphismInspector.internal.results.ResultsGUI;
 import org.cytoscape.model.CyEdge;
@@ -24,6 +27,7 @@ public class IsoThread extends Thread{
     private String edgelabel1;
     private String nodelabel2;
     private String edgelabel2;
+    private int mappingcount=0;
     
     IsoUI menu;    
     
@@ -96,26 +100,67 @@ public class IsoThread extends Thread{
         if (vf2.isomorphismExists()) {
             menu.endComputation("<html>Graphs are isomorphic.<br><html>");
             System.out.println("Graphs are isomorphic.");
-            int mappingcount=1;
+            mappingcount=1;
             Iterator<GraphMapping<CyNode, CyEdge>> iter = vf2.getMappings();
-            System.out.println("Priting an isomorphic mapping of the graphs");
+//            System.out.println("Priting an isomorphic mapping of the graphs");
             GraphMapping<CyNode, CyEdge> mapping = iter.next();
             ResultsGUI resultsPanel = menu.isocore.createResultsPanel(mapping, network1, network2);
-            System.out.println(mapping);
-            System.out.println();
-            System.out.println("Counting number of isomorphic mappings");
-            while(iter.hasNext()){
-                mappingcount++;
-                iter.next();
+//            System.out.println(mapping);
+//            System.out.println();
+            System.out.println("Counting number of isomorphic mappings...");
+            CountMappings countThread = new CountMappings(iter, resultsPanel);
+            countThread.start();
+            try {
+                // take attribute from user
+//                String timeToWait = JOptionPane.showInputDialog(null, 
+//                        "Enter time to wait in secnds to compute total number of mappings");
+                // waiting 5 seconds to return from the counting thread
+                countThread.join(5000);
+                if(countThread.isAlive()){
+                    countThread.stopalgo();
+                    resultsPanel.setResult("There are ATLEAST "+mappingcount+" number of isomorphic mappings");
+                    System.out.println("There are ATLEAST ["+mappingcount+"] number of isomorphic mappings");
+                    System.out.println("------------------Graph Isomorphism------------------");
+                }
+            } catch (InterruptedException ex) {
+                Logger.getLogger(IsoThread.class.getName()).log(Level.SEVERE, null, ex);
             }
-            resultsPanel.setResult("Number of isomorphisms found = "+mappingcount);
-            System.out.println("There are ["+mappingcount+"] number of isomorphic mappings");
         } else {
             menu.endComputation("<html>Graphs are NOT isomorphic.<br><html>");
             System.out.println("Graphs are NOT isomorphic.");
+            System.out.println("------------------Graph Isomorphism------------------");
         }
-        System.out.println("------------------Graph Isomorphism------------------");
         
     }
     
+    private class CountMappings extends Thread{
+        boolean stop = false;
+        Iterator<GraphMapping<CyNode, CyEdge>> iter;
+        ResultsGUI resultsPanel;
+        public CountMappings(Iterator<GraphMapping<CyNode, CyEdge>> iter, ResultsGUI resultsPanel) {
+            this.iter = iter;
+            this.resultsPanel = resultsPanel;
+        }
+        
+        @Override
+        public void run(){
+            while(iter.hasNext()){
+                if(stop)
+                    return;
+                mappingcount++;
+                iter.next();
+                if(stop)
+                    return;
+            }
+            if(stop)
+                return;
+            resultsPanel.setResult("Number of isomorphisms found = "+mappingcount);
+            System.out.println("There are ["+mappingcount+"] number of isomorphic mappings");
+            System.out.println("------------------Graph Isomorphism------------------");
+        }
+        
+        public void stopalgo(){
+            stop = true;
+        }
+    }
 }
