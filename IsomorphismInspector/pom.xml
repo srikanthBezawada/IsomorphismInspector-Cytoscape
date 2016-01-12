@@ -9,9 +9,9 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.cytoscape</groupId>
 	<artifactId>IsomorphismInspector</artifactId>
-	<version>1.0</version>
+	<version>0.2</version>
 
-			<name>IsomorphismInspector</name>
+			<name>CyIsomorphism</name>
 	
 	<packaging>bundle</packaging>
 
