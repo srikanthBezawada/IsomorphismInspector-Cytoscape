@@ -1,10 +1,13 @@
 package org.cytoscape.isomorphismInspector.internal.logic;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import org.cytoscape.isomorphismInspector.internal.IsoUI;
 import org.cytoscape.isomorphismInspector.internal.results.ResultsGUI;
 import org.cytoscape.model.CyEdge;
@@ -12,7 +15,7 @@ import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.CyNode;
 import org.jgrapht.GraphMapping;
 import org.jgrapht.UndirectedGraph;
-import org.jgrapht.alg.isomorphism.VF2GraphIsomorphismInspector;
+import org.jgrapht.alg.isomorphism.VF2SubgraphIsomorphismInspector;
 import org.jgrapht.graph.SimpleGraph;
 
 /**
@@ -92,8 +95,8 @@ public class IsoThread extends Thread{
         else
             edgeComp = new EdgeLabelEquivalenceComparator(network1, edgelabel1, network2, edgelabel2);
         
-        VF2GraphIsomorphismInspector<CyNode, CyEdge> vf2 =
-            new VF2GraphIsomorphismInspector<CyNode, CyEdge>(g1, g2, nodeComp, edgeComp);        
+        VF2SubgraphIsomorphismInspector<CyNode, CyEdge> vf2 =
+            new VF2SubgraphIsomorphismInspector<CyNode, CyEdge>(g1, g2, nodeComp, edgeComp);
  
         System.out.println();
         System.out.println("------------------Graph Isomorphism------------------");
@@ -108,7 +111,7 @@ public class IsoThread extends Thread{
 //            System.out.println(mapping);
 //            System.out.println();
             System.out.println("Counting number of isomorphic mappings...");
-            CountMappings countThread = new CountMappings(iter, resultsPanel);
+            CountMappings countThread = new CountMappings(iter, network1, network2, resultsPanel);
             countThread.start();
             try {
                 // take attribute from user
@@ -137,9 +140,15 @@ public class IsoThread extends Thread{
         boolean stop = false;
         Iterator<GraphMapping<CyNode, CyEdge>> iter;
         ResultsGUI resultsPanel;
-        public CountMappings(Iterator<GraphMapping<CyNode, CyEdge>> iter, ResultsGUI resultsPanel) {
+        CyNetwork net1;
+        CyNetwork net2;
+        
+        public CountMappings(Iterator<GraphMapping<CyNode, CyEdge>> iter, CyNetwork net1, 
+                CyNetwork net2, ResultsGUI resultsPanel) {
             this.iter = iter;
             this.resultsPanel = resultsPanel;
+            this.net1 = net1;
+            this.net2 = net2;
         }
         
         @Override
@@ -148,7 +157,20 @@ public class IsoThread extends Thread{
                 if(stop)
                     return;
                 mappingcount++;
-                iter.next();
+                GraphMapping<CyNode, CyEdge> mapping = iter.next();
+                //populate table
+                DefaultTableModel dtm = (DefaultTableModel) resultsPanel.getTable().getModel();
+                
+                // add column dynamically into the table
+                List<CyNode> net1NodeList = net1.getNodeList();
+                List<ResultsGUI.cellData> data = new ArrayList<ResultsGUI.cellData>();
+                for (CyNode n1: net1NodeList) {
+                    CyNode n2 = mapping.getVertexCorrespondence(n1, true);
+                    if(n2 != null){
+                        data.add(new ResultsGUI.cellData(net1, net2, n1, n2));
+                    }
+                }
+                dtm.addColumn("Mapping "+ mappingcount, data.toArray());
                 if(stop)
                     return;
             }

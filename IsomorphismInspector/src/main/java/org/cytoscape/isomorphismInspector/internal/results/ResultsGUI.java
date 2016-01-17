@@ -8,12 +8,14 @@ package org.cytoscape.isomorphismInspector.internal.results;
 
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import javax.swing.Icon;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 import org.cytoscape.application.swing.CytoPanelComponent;
 import org.cytoscape.application.swing.CytoPanelName;
 import org.cytoscape.isomorphismInspector.internal.CyActivator;
@@ -64,24 +66,27 @@ public class ResultsGUI extends javax.swing.JPanel implements CytoPanelComponent
             }   
         };
 
-        // add header of the table
-        // get the network names
-        String header[] = new String[] { net1.getRow(net1).get(CyNetwork.NAME, String.class),
-           net2.getRow(net2).get(CyNetwork.NAME, String.class) };
-
-        // add header in table model     
-        dtm.setColumnIdentifiers(header);
-            //set model into the table object
-            tbl.setModel(dtm);
-
-        // add row dynamically into the table
+        //set model into the table object
+        tbl.setModel(dtm);
+        tbl.setCellSelectionEnabled(true);
+        tbl.setColumnSelectionAllowed(true);
+        JTableHeader header = tbl.getTableHeader();
+        header.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                headerMouseReleased(evt);
+            }
+        });
+        // add column dynamically into the table
         List<CyNode> net1NodeList = net1.getNodeList();
+        List<cellData> data = new ArrayList<cellData>();
         for (CyNode n1: net1NodeList) {
             CyNode n2 = mapping.getVertexCorrespondence(n1, true);
-            dtm.addRow(new Object[] { net1.getRow(n1).get(CyNetwork.NAME, String.class)
-            , net2.getRow(n2).get(CyNetwork.NAME, String.class) });
+            if(n2 != null){
+                data.add(new cellData(net1, net2, n1, n2));
+            }
         }
-       
+       dtm.addColumn("Mapping 1", data.toArray());
         // attach listener
         tbl.addMouseListener(new MouseAdapter() {
             @Override
@@ -213,9 +218,36 @@ public class ResultsGUI extends javax.swing.JPanel implements CytoPanelComponent
     public void setResult(String s){
         this.jLabel2.setText(s);
     }
+    
+    public JTable getTable(){
+        return tbl;
+    }
 
     private void tableMouseReleased(java.awt.event.MouseEvent evt){
-        int[] selections = tbl.getSelectedRows();
+        int cs[] = tbl.getSelectedColumns();
+        int rs[] = tbl.getSelectedRows();
+        cellData[] data = new cellData[rs.length*cs.length];
+        int k = 0;
+        for(int i=0 ; i<rs.length ; i++)
+            for(int j=0 ; j<cs.length ; j++)
+                data[k++] = (cellData) tbl.getValueAt(rs[i], cs[j]);
+        selectNodesInNetworks(data);
+    }
+    
+    private void headerMouseReleased(java.awt.event.MouseEvent evt){
+        int c = tbl.getTableHeader().columnAtPoint(evt.getPoint());
+        tbl.clearSelection();
+        tbl.setColumnSelectionInterval(c, c);
+        int rowCount = tbl.getRowCount();
+        cellData[] data = new cellData[rowCount];
+        for(int i=0 ; i<rowCount ; i++){
+            data[i] = (cellData) tbl.getValueAt(i, c);
+        }
+        selectNodesInNetworks(data);
+    }
+    
+    private void selectNodesInNetworks(cellData[] data){
+        // clear selection
         CyTable nodeTable1 = net1.getDefaultNodeTable();
         for(CyNode n1 : net1.getNodeList()){	
             CyRow row = nodeTable1.getRow(n1.getSUID());
@@ -228,11 +260,9 @@ public class ResultsGUI extends javax.swing.JPanel implements CytoPanelComponent
         }
         // select the correspoding node in the net1
         // select the correspoding node in the net2
-        for(int i=0;i<selections.length; i++){
-            CyNode node1 = net1.getNodeList().get(selections[i]);
-            nodeTable1.getRow(node1.getSUID()).set("selected", true);
-            CyNode node2 = mapping.getVertexCorrespondence(node1, true);
-            nodeTable2.getRow(node2.getSUID()).set("selected", true);
+        for(cellData cell : data){
+            nodeTable1.getRow(cell.n1.getSUID()).set("selected", true);
+            nodeTable2.getRow(cell.n2.getSUID()).set("selected", true);
         }
         //update views
         Collection<CyNetworkView> c1 = CyActivator.getNetworkViewManager().getNetworkViews(net1);
@@ -244,6 +274,28 @@ public class ResultsGUI extends javax.swing.JPanel implements CytoPanelComponent
         while(it2.hasNext())
             it2.next().updateView();
         
+        
+    }
+    
+    public static class cellData{
+        CyNetwork net1;
+        CyNetwork net2;
+        CyNode n1;
+        CyNode n2;
+        
+        public cellData(CyNetwork net1, CyNetwork net2, CyNode n1, CyNode n2){
+            this.net1 = net1;
+            this.net2 = net2;
+            this.n1 = n1;
+            this.n2 = n2;
+        }
+        
+        @Override
+        public String toString(){
+            String n1name = net1.getRow(n1).get(CyNetwork.NAME, String.class);
+            String n2name = net2.getRow(n2).get(CyNetwork.NAME, String.class);
+            return n1name+"-"+n2name;
+        }
     }
     
 }
