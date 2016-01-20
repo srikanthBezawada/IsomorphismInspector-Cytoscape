@@ -46,6 +46,7 @@ public class IsoThread extends Thread{
    
     @Override
     public void run(){
+        long startTime = System.currentTimeMillis();
         menu.startComputation();
         UndirectedGraph<CyNode, CyEdge> g1 = new SimpleGraph<CyNode, CyEdge>(CyEdge.class);   
         List<CyNode> nodeList1 = network1.getNodeList();
@@ -123,7 +124,6 @@ public class IsoThread extends Thread{
                     countThread.stopalgo();
                     resultsPanel.setResult("There are ATLEAST "+mappingcount+" number of isomorphic mappings");
                     System.out.println("There are ATLEAST ["+mappingcount+"] number of isomorphic mappings");
-                    System.out.println("------------------Graph Isomorphism------------------");
                 }
             } catch (InterruptedException ex) {
                 Logger.getLogger(IsoThread.class.getName()).log(Level.SEVERE, null, ex);
@@ -131,8 +131,10 @@ public class IsoThread extends Thread{
         } else {
             menu.endComputation("<html>Graphs are NOT isomorphic.<br><html>");
             System.out.println("Graphs are NOT isomorphic.");
-            System.out.println("------------------Graph Isomorphism------------------");
         }
+        long endTime = System.currentTimeMillis();
+        System.out.println("Time taken to execute (ms): "+(endTime-startTime));
+        System.out.println("------------------Graph Isomorphism------------------");
         
     }
     
