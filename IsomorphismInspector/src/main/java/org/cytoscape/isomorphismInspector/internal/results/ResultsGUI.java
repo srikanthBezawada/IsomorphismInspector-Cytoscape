@@ -7,6 +7,7 @@
 package org.cytoscape.isomorphismInspector.internal.results;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -70,6 +71,7 @@ public class ResultsGUI extends javax.swing.JPanel implements CytoPanelComponent
         tbl.setModel(dtm);
         tbl.setCellSelectionEnabled(true);
         tbl.setColumnSelectionAllowed(true);
+        tbl.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         JTableHeader header = tbl.getTableHeader();
         header.addMouseListener(new MouseAdapter() {
             @Override
@@ -87,6 +89,8 @@ public class ResultsGUI extends javax.swing.JPanel implements CytoPanelComponent
             }
         }
        dtm.addColumn("Mapping 1", data.toArray());
+       tbl.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+       tbl.setFillsViewportHeight(true);
         // attach listener
         tbl.addMouseListener(new MouseAdapter() {
             @Override
@@ -150,15 +154,19 @@ public class ResultsGUI extends javax.swing.JPanel implements CytoPanelComponent
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(30, 30, 30)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jButton1)
+                                    .addComponent(jLabel1))
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
